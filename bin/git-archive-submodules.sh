@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# git-tar-submodules - A script to produce an archive tar.gz file of the a git module including all git submodules
+# git-archive-submodules - A script to produce an archive tar.gz file of the a git module including all git submodules
 # based on https://ttboj.wordpress.com/2015/07/23/git-archive-with-submodules-and-tar-magic/
 
 
 usage()
 {
-  echo >&2 "git-tar-submodules - A script to produce an archive tar.gz file of the
+  echo >&2 "git-archive-submodules - A script to produce an archive tar.gz file of the
                        a git module including all git submodules"
   echo >&2 "requires: git, sed, gzip, and tar (or gtar on macos)"
   echo >&2 "usage: $0 [destination]"
