@@ -34,11 +34,13 @@ export TARMODULE=`basename \`git rev-parse --show-toplevel\``
 export GIT_TAG=`git describe --tags --abbrev=0`
 export TARVERSION=`echo ${GIT_TAG} | sed 's/v//g'`
 export TARPREFIX="${TARMODULE}-${TARVERSION}"
+export TMPDIR=`mktemp -d git-archive.XXXXXXXXXX -p /tmp`/
 
 # create module archive
 git archive --prefix=${TARPREFIX}/ -o ${TMPDIR}${TARPREFIX}.tar ${GIT_TAG}
 if [[ ! -f "${TMPDIR}${TARPREFIX}.tar" ]]; then
   echo "ERROR: base sourcecode archive was not created. check git output in log above."
+  rm -rf $TMPDIR
   usage
   exit 1
 fi
@@ -53,6 +55,7 @@ git submodule foreach --recursive 'git archive --prefix=${TARPREFIX}/${displaypa
 gzip -9 ${TMPDIR}${TARPREFIX}.tar
 if [[ ! -f "${TMPDIR}${TARPREFIX}.tar.gz" ]]; then
   echo "ERROR: gzipped archive was not created. check git output in log above."
+  rm -rf $TMPDIR
   usage
   exit 1
 fi
@@ -65,10 +68,11 @@ else
 fi
 cp ${TMPDIR}${TARPREFIX}.tar.gz ${destination}
 if [[ -f "${TMPDIR}${TARPREFIX}.tar.gz" ]]; then
-  rm ${TMPDIR}${TARPREFIX}.tar.gz
+  rm -rf $TMPDIR
   echo "created ${destination}"
 else
   echo "ERROR copying ${TMPDIR}${TARPREFIX}.tar.gz to ${destination}"
+  rm -rf $TMPDIR
   usage
   exit 1
 fi
