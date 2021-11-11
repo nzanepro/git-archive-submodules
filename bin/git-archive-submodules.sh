@@ -31,11 +31,12 @@ command -v sed >/dev/null 2>&1 || { usage; echo >&2 "ERROR:I require sed but it'
 command -v gzip >/dev/null 2>&1 || { usage; echo >&2 "ERROR:I require gzip but it's not installed.  Aborting."; usage; exit 1; }
 
 export TARMODULE=`basename \`git rev-parse --show-toplevel\``
-export TARVERSION=`git describe --tags --abbrev=0 | sed 's/v//g'`
+export GIT_TAG=`git describe --tags --abbrev=0`
+export TARVERSION=`echo ${GIT_TAG} | sed 's/v//g'`
 export TARPREFIX="${TARMODULE}-${TARVERSION}"
 
 # create module archive
-git archive --prefix=${TARPREFIX}/ -o ${TMPDIR}${TARPREFIX}.tar v${TARVERSION}
+git archive --prefix=${TARPREFIX}/ -o ${TMPDIR}${TARPREFIX}.tar ${GIT_TAG}
 if [[ ! -f "${TMPDIR}${TARPREFIX}.tar" ]]; then
   echo "ERROR: base sourcecode archive was not created. check git output in log above."
   usage
