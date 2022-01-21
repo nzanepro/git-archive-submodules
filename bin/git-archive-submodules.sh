@@ -15,7 +15,8 @@ usage()
 # requires gnu-tar on mac
 export TARCOMMAND=tar
 case "$OSTYPE" in
-  darwin*)  export TARCOMMAND=gtar;;
+  darwin*)    export TARCOMMAND=gtar;;
+  linux-gnu*) export TARCOMMAND=tar;;
   *)        echo "unknown: $OSTYPE" && exit 1;;
 esac
 command -v ${TARCOMMAND} >/dev/null 2>&1 || { usage; echo >&2 "ERROR: I require ${TARCOMMAND} but it's not installed.  Aborting."; exit 1; }
